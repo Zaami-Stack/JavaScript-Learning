@@ -1,4 +1,5 @@
 import {products} from "./data/products.js";
+import { cart } from "./cart.js";
 
 let GenerateProductsHtml = ``;
 
@@ -23,7 +24,7 @@ products.forEach((product) => {
           </div>
 
           <div class="product-price">
-            $${product.price}
+            $${(product.priceCents / 100).toFixed(2)}
           </div>
 
           <div class="product-quantity-container">
@@ -48,7 +49,7 @@ products.forEach((product) => {
             Added
           </div>
 
-          <button class="add-to-cart-button button-primary" >
+          <button data-product-id="${product.id}" class="add-to-cart-button button-primary" >
             Add to Cart
           </button>
         </div>
@@ -57,4 +58,36 @@ products.forEach((product) => {
 
 document.querySelector('.products-grid').innerHTML = GenerateProductsHtml;
 
+  document.querySelectorAll('.add-to-cart-button')
+    .forEach((button)=>{
+      
+      button.addEventListener('click', ()=>{
+        let productId = button.dataset.productId;
+        let matchingProduct;
+        cart.forEach((cartProduct)=>{
 
+          if (cartProduct.Id === productId) {
+            matchingProduct = cartProduct;
+
+          }
+          
+
+        });
+
+        if (matchingProduct) {
+            matchingProduct.quantity += 1;
+          }else{
+            cart.push({
+              Id : productId,
+              quantity : 1
+            })
+          }
+          
+          let quantity = 0;
+          cart.forEach((item)=>{
+            quantity += item.quantity;
+          })
+          document.querySelector('.cart-quantity ')
+            .innerHTML = quantity;
+      })
+    });
